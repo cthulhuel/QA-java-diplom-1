@@ -1,28 +1,39 @@
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import praktikum.Ingredient;
 import praktikum.IngredientType;
 import static org.assertj.core.api.Assertions.assertThat;
-import static praktikum.IngredientType.SAUCE;
 
+@RunWith(Parameterized.class)
 public class TestIngredient {
 
-    @Test
-    public void testGetPriceIngredient() {
-        Ingredient ingredient = new Ingredient(IngredientType.FILLING,"Курица",100);
-        assertThat(ingredient.getPrice()).isEqualTo(100);
+    private final IngredientType type;
+    private final String name;
+    private final float price;
+
+    public TestIngredient(IngredientType type, String name, float price) {
+        this.type = type;
+        this.name = name;
+        this.price = price;
+    }
+
+    @Parameterized.Parameters()
+    public static Object[][] parameters() {
+        return new Object[][]{
+                {IngredientType.FILLING,"Курица",100},
+                {IngredientType.FILLING,"Говядина",150},
+                {IngredientType.SAUCE,"Майонез",15},
+                {IngredientType.SAUCE,"Кетчуп",10},
+        };
     }
 
     @Test
-    public void testGetNameIngredient() {
-        Ingredient ingredient = new Ingredient(IngredientType.SAUCE,"Майонез",15);
-        assertThat(ingredient.getName()).isEqualTo("Майонез");
-    }
-
-    @Test
-    public void testGetTypeIngredient() {
-        IngredientType expectedIngredientType = SAUCE;
-        Ingredient ingredient = new Ingredient(expectedIngredientType,"Кетчуп",10);
-        assertThat(ingredient.getType()).isEqualTo(expectedIngredientType);
+    public void testIngredient() {
+        Ingredient ingredient = new Ingredient(type, name, price);
+        assertThat(ingredient.getType()).isEqualTo(type);
+        assertThat(ingredient.getName()).isEqualTo(name);
+        assertThat(ingredient.getPrice()).isEqualTo(price);
     }
 
 }
